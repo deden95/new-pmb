@@ -38,7 +38,7 @@ class ViewVerification extends ViewRecord
                         TextEntry::make('user.phone')->label('No. HP'),
                         TextEntry::make('national_id')->label('NIK'),
                         TextEntry::make('gender')->label('Jenis Kelamin'),
-                        TextEntry::make('birth_place')->label('Tempat Lahir'),
+                        TextEntry::make('birth_place_city')->label('Tempat Lahir'),
                         TextEntry::make('birth_date')->label('Tanggal Lahir')->date(),
                         TextEntry::make('religion')->label('Agama'),
                     ])
@@ -103,7 +103,12 @@ class ViewVerification extends ViewRecord
             ->label($label)
             ->getStateUsing(function ($record) use ($collection) {
                 $media = $record->getFirstMedia($collection);
-                return $media ? [$media->getUrl()] : null;
+                if ($media) {
+                    // Jika ada media, tampilkan gambar
+                    return [$media->getUrl()];
+                }
+                // Jika tidak ada media, tampilkan teks "File Belum Diunggah"
+                return 'File Belum Diunggah';
             })
             ->extraImgAttributes([
                 'class' => 'w-full h-40 object-contain border rounded-lg cursor-pointer',
